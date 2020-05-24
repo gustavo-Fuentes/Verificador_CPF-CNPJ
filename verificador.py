@@ -1,10 +1,10 @@
-
-
+import time
+from multiprocessing import Process
 base = "BASEPROJETO.txt"
 
 arquivo = open(base, 'r')
 
-DADOS = open('Dados.txt', 'w+')
+DADOS = open('Dados.txt', 'w+') # Output
 
 
 cpf_primeiro_peso = [10, 9, 8, 7, 6, 5, 4, 3, 2]
@@ -32,19 +32,16 @@ def baseDeDados():
     return cpf_cnpj
 
 
-def calculaCPF_CNPJ(dado):  # calcula os dois digitos verificadores, tanto do cnpj como o cpf
+def calculaCPF_CNPJ(dados):  # calcula os dois digitos verificadores, tanto do cnpj como o cpf
     """
-    a função tem que receber:
-    - dado = uma cpf ou um cnpj
-    - peso1 = uma lista de pesos para o calculo do primeiro numero verificador (CPF/CNPJ)
-    - peso2 = uma lista de pesos para o calculo do segundo  numero verificador (CPF/CNPJ)
+    a função recebe uma lista de Dados
 
     """
     # calcula o primeiro numero verificador do cpf/cnpj
     
     cpf = []
     cnpj = []
-    for d in dado:
+    for d in dados:
         primeiro_numero = 0
         if len(d) == 9:
             peso1 = cpf_primeiro_peso
@@ -90,22 +87,20 @@ def calculaCPF_CNPJ(dado):  # calcula os dois digitos verificadores, tanto do cn
         DADOS.write(c +'\n')
 
 def main():
+    process = []
+    
     dados = baseDeDados()
-    calculaCPF_CNPJ(dados)
+    #calculaCPF_CNPJ(dados)
+    for i in range(4):
+        proc = Process(target=calculaCPF_CNPJ, args=(dados,))
+        proc.start()
+        process.append(proc)
+    for p in process:
+        p.join()
+    
 
 
 if __name__ == "__main__":
     main()
     arquivo.close()
-
-
-"""
-processes = []
-for i in range(NUM_PROCESSOS):
-    p = Process(target=processa_dado, args=(
-        dados, i, cpf_completo, cnpj_completo))  # Passing the list
-    p.start() # inicia os mini processos
-    processes.append(p)
-for p in processes:
-    p.join() #faz esperar
-"""
+    DADOS.close()
