@@ -50,9 +50,12 @@ def calculaCPF_CNPJ(dados):  # calcula os dois digitos verificadores, tanto do c
         else:
             peso1 = cnpj_primeiro_peso
             peso2 = cnpj_segundo_peso
+            
+# calcula o primeiro numero verificador do cpf/cnpj
 
         for numero, p1 in zip(d, peso1):
             primeiro_numero += int(numero) * p1
+            
 
         if primeiro_numero % 11 < 2:
             primeiro_numero = 0
@@ -60,8 +63,9 @@ def calculaCPF_CNPJ(dados):  # calcula os dois digitos verificadores, tanto do c
             primeiro_numero = 11 - (primeiro_numero % 11)
 
         d = d + str(primeiro_numero)
+        
+# calcula o segundo numero verificador do cpf/cnpj
 
-        # calcula o segundo numero verificador do cpf/cnpj
         segundo_numero = 0
         for numero, p2 in zip(d, peso2):
             segundo_numero += int(numero) * p2
@@ -87,16 +91,16 @@ def calculaCPF_CNPJ(dados):  # calcula os dois digitos verificadores, tanto do c
         DADOS.write(c +'\n')
 
 def main():
-    process = []
     
-    dados = baseDeDados()
+    dados = baseDeDados() # retorna uma lista
     #calculaCPF_CNPJ(dados)
+    process = []
     for i in range(4):
-        proc = Process(target=calculaCPF_CNPJ, args=(dados,))
+        proc = Process(target=calculaCPF_CNPJ, args=(dados, ))
         proc.start()
         process.append(proc)
     for p in process:
-        p.join()
+        p.join() # espera todos os processos acabarem
     
 
 
