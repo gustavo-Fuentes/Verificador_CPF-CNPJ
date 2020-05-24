@@ -84,20 +84,20 @@ def calculaCPF_CNPJ(dados):  # calcula os dois digitos verificadores, tanto do c
         else:
             cnpj.append(d)
 
-    for c in cpf:
-        DADOS.write(c +'\n')
+    for c in cpf: 
+        DADOS.write(c +'\n') #adiciona os cpf completos no arquivo DADOS
         
     for c in cnpj:
-        DADOS.write(c +'\n')
+        DADOS.write(c +'\n') #adiciona os cnpj completos no arquivo DADOS
 
-def main():
+def main(): 
     
     dados = baseDeDados() # retorna uma lista
     #calculaCPF_CNPJ(dados)
     process = []
     for i in range(4):
         proc = Process(target=calculaCPF_CNPJ, args=(dados, ))
-        proc.start()
+        proc.start() # Inicia os 4 processos
         process.append(proc)
     for p in process:
         p.join() # espera todos os processos acabarem
@@ -106,5 +106,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # Fechamento dos arquivos, só uma boa prática
     arquivo.close()
     DADOS.close()
